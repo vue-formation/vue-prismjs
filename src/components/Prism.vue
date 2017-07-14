@@ -1,24 +1,40 @@
 <template lang="pug">
   pre(ref="pre", :class="preClass")
     code(ref="code", :class="codeClass")
-      slot
+      | {{code}}
+      slot(ref="codeslot", v-if="!code")
 </template>
 
 <script type="text/babel">
   import Prism from 'prismjs'
 
   const plugins = {
-    'autolinker': {
-      path: 'prismjs/plugins/autolinker/prism-autolinker',
-      css: 'prismjs/plugins/autolinker/prism-autolinker.css'
-    },
-    'autoloader': {
-      path: 'prismjs/plugins/autoloader/prism-autoloader'
-    },
-    'command-line': {
-      path: 'prismjs/plugins/command-line/prism-command-line',
-      css: 'prismjs/plugins/command-line/prism-command-line.css'
-    }
+    'autolinker': { css: true },
+    'autoloader': {},
+    'command-line': { css: true },
+    'copy-to-clipboard': {},
+    'custom-class': {},
+    'data-uri-highlight': {},
+    'file-highlight': {},
+    'highlight-keywords': {},
+    'ie8': { css: true },
+    'jsonp-highlight': {},
+    'keep-markup': {},
+    'line-highlight': { css: true },
+    'line-numbers': { css: true },
+    'normalize-whitespace': {},
+    'previewer-angle': { css: true },
+    'previewer-base': { css: true },
+    'previewer-color': { css: true },
+    'previewer-easing': { css: true },
+    'previewer-gradient': { css: true },
+    'previewer-time': { css: true },
+    'remove-initial-line-feed': {},
+    'show-invisibles': { css: true },
+    'show-language': {},
+    'toolbar': { css: true },
+    'unescaped-markup': { css: true },
+    'wpd': { css: true }
   }
 
   export default {
@@ -32,6 +48,15 @@
         default () {
           return []
         }
+      },
+      use: {
+        type: Function,
+        default () {
+          return true
+        }
+      },
+      code: {
+        type: String
       }
     },
     computed: {
@@ -53,17 +78,29 @@
 
       this.plugins.forEach(plugin => {
         let p = plugins[plugin] || {}
-        if (p.path) require(`prismjs/plugins/${plugin}/prism-${plugin}`)
+        if (p) require(`prismjs/plugins/${plugin}/prism-${plugin}`)
         if (p.css) require(`prismjs/plugins/${plugin}/prism-${plugin}.css`)
       })
+
+      this.use(Prism, this)
     },
     methods: {
+      render () {
+        this.codeText = this.code || this.$refs.pre.innerText
+        this.$refs.pre.firstChild.innerHTML = this.codeText
+        Prism.highlightElement(this.$refs.pre.firstChild)
+      },
       hasPlugin (plugin) {
         return this.plugins.indexOf(plugin) !== -1
       }
     },
     mounted () {
-      Prism.highlightElement(this.$refs.code)
+      this.render()
+    },
+    data () {
+      return {
+        codeText: null
+      }
     }
   }
 </script>
