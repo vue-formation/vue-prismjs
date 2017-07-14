@@ -2,9 +2,10 @@
 
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
+var _defineProperty = _interopDefault(require('babel-runtime/helpers/defineProperty'));
 var Prism = _interopDefault(require('prismjs'));
 
-const plugins = {
+var plugins = {
   'autolinker': {
     path: 'prismjs/plugins/autolinker/prism-autolinker',
     css: 'prismjs/plugins/autolinker/prism-autolinker.css'
@@ -18,7 +19,9 @@ const plugins = {
   }
 };
 
-var Prism$2 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('pre',{ref:"pre",class:_vm.preClass},[_c('code',{ref:"code",class:_vm.codeClass},[_vm._t("default")],2)])},staticRenderFns: [],
+var Prism$2 = { render: function render() {
+    var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('pre', { ref: "pre", class: _vm.preClass }, [_c('code', { ref: "code", class: _vm.codeClass }, [_vm._t("default")], 2)]);
+  }, staticRenderFns: [],
   props: {
     language: {
       type: String,
@@ -30,44 +33,41 @@ var Prism$2 = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=
     },
     plugins: {
       type: Array,
-      default () {
-        return []
+      default: function _default() {
+        return [];
       }
     }
   },
   computed: {
-    preClass () {
+    preClass: function preClass() {
       return {
         'command-line': this.hasPlugin('command-line')
-      }
+      };
     },
-    codeClass () {
-      return {
-        [`language-${this.language}`]: true
-      }
+    codeClass: function codeClass() {
+      return _defineProperty({}, 'language-' + this.language, true);
     }
   },
-  created () {
+  created: function created() {
     if (!Prism.languages[this.language]) {
-      require(`prismjs/components/prism-${this.language}`);
+      require('prismjs/components/prism-' + this.language);
     }
 
-    this.theme === 'default'
-      ? require('prismjs/themes/prism.css')
-      : require(`prismjs/themes/prism-${this.theme}.css`);
+    this.theme === 'default' ? require('prismjs/themes/prism.css') : require('prismjs/themes/prism-' + this.theme + '.css');
 
-    this.plugins.forEach(plugin => {
-      let p = plugins[plugin] || {};
-      if (p.path) require(`prismjs/plugins/${plugin}/prism-${plugin}`);
-      if (p.css) require(`prismjs/plugins/${plugin}/prism-${plugin}.css`);
+    this.plugins.forEach(function (plugin) {
+      var p = plugins[plugin] || {};
+      if (p.path) require('prismjs/plugins/' + plugin + '/prism-' + plugin);
+      if (p.css) require('prismjs/plugins/' + plugin + '/prism-' + plugin + '.css');
     });
   },
+
   methods: {
-    hasPlugin (plugin) {
-      return this.plugins.indexOf(plugin) !== -1
+    hasPlugin: function hasPlugin(plugin) {
+      return this.plugins.indexOf(plugin) !== -1;
     }
   },
-  mounted () {
+  mounted: function mounted() {
     Prism.highlightElement(this.$refs.code);
   }
 };
