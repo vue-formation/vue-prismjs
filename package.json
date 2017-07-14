@@ -3,8 +3,7 @@
   "version": "0.1.0",
   "description": "Prism.js component for Vue.js",
   "author": "Branden Horiuchi <bhoriuchi@gmail.com>",
-  "private": true,
-  "main": "vue-prism.js",
+  "main": "vue-prismjs.js",
   "scripts": {
     "dev": "node build/dev-server.js",
     "start": "node build/dev-server.js",
