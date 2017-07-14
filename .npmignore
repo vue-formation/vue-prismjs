@@ -1,0 +1,14 @@
+build
+config
+assets
+node_modules
+src
+static
+.babelrc
+.DS_Store
+.idea
+npm-debug.log
+.npmignore
+.travis.yml
+.*
+index.html
