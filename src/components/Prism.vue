@@ -27,10 +27,6 @@
         type: String,
         default: 'javascript'
       },
-      theme: {
-        type: String,
-        default: 'default'
-      },
       plugins: {
         type: Array,
         default () {
@@ -54,10 +50,6 @@
       if (!Prism.languages[this.language]) {
         require(`prismjs/components/prism-${this.language}`)
       }
-
-      this.theme === 'default'
-        ? require('prismjs/themes/prism.css')
-        : require(`prismjs/themes/prism-${this.theme}.css`)
 
       this.plugins.forEach(plugin => {
         let p = plugins[plugin] || {}

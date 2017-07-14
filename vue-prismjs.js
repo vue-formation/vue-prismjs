@@ -27,10 +27,6 @@ var Prism$2 = { render: function render() {
       type: String,
       default: 'javascript'
     },
-    theme: {
-      type: String,
-      default: 'default'
-    },
     plugins: {
       type: Array,
       default: function _default() {
@@ -52,8 +48,6 @@ var Prism$2 = { render: function render() {
     if (!Prism.languages[this.language]) {
       require('prismjs/components/prism-' + this.language);
     }
-
-    this.theme === 'default' ? require('prismjs/themes/prism.css') : require('prismjs/themes/prism-' + this.theme + '.css');
 
     this.plugins.forEach(function (plugin) {
       var p = plugins[plugin] || {};
