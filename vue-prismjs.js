@@ -6,21 +6,36 @@ var _defineProperty = _interopDefault(require('babel-runtime/helpers/definePrope
 var Prism = _interopDefault(require('prismjs'));
 
 var plugins = {
-  'autolinker': {
-    path: 'prismjs/plugins/autolinker/prism-autolinker',
-    css: 'prismjs/plugins/autolinker/prism-autolinker.css'
-  },
-  'autoloader': {
-    path: 'prismjs/plugins/autoloader/prism-autoloader'
-  },
-  'command-line': {
-    path: 'prismjs/plugins/command-line/prism-command-line',
-    css: 'prismjs/plugins/command-line/prism-command-line.css'
-  }
+  'autolinker': { css: true },
+  'autoloader': {},
+  'command-line': { css: true },
+  'copy-to-clipboard': {},
+  'custom-class': {},
+  'data-uri-highlight': {},
+  'file-highlight': {},
+  'highlight-keywords': {},
+  'ie8': { css: true },
+  'jsonp-highlight': {},
+  'keep-markup': {},
+  'line-highlight': { css: true },
+  'line-numbers': { css: true },
+  'normalize-whitespace': {},
+  'previewer-angle': { css: true },
+  'previewer-base': { css: true },
+  'previewer-color': { css: true },
+  'previewer-easing': { css: true },
+  'previewer-gradient': { css: true },
+  'previewer-time': { css: true },
+  'remove-initial-line-feed': {},
+  'show-invisibles': { css: true },
+  'show-language': {},
+  'toolbar': { css: true },
+  'unescaped-markup': { css: true },
+  'wpd': { css: true }
 };
 
 var Prism$2 = { render: function render() {
-    var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('pre', { ref: "pre", class: _vm.preClass }, [_c('code', { ref: "code", class: _vm.codeClass }, [_vm._t("default")], 2)]);
+    var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('pre', { ref: "pre", class: _vm.preClass }, [_c('code', { ref: "code", class: _vm.codeClass }, [_vm._v(_vm._s(_vm.code)), !_vm.code ? _vm._t("default") : _vm._e()], 2)]);
   }, staticRenderFns: [],
   props: {
     language: {
@@ -32,6 +47,15 @@ var Prism$2 = { render: function render() {
       default: function _default() {
         return [];
       }
+    },
+    use: {
+      type: Function,
+      default: function _default() {
+        return true;
+      }
+    },
+    code: {
+      type: String
     }
   },
   computed: {
@@ -51,18 +75,30 @@ var Prism$2 = { render: function render() {
 
     this.plugins.forEach(function (plugin) {
       var p = plugins[plugin] || {};
-      if (p.path) require('prismjs/plugins/' + plugin + '/prism-' + plugin);
+      if (p) require('prismjs/plugins/' + plugin + '/prism-' + plugin);
       if (p.css) require('prismjs/plugins/' + plugin + '/prism-' + plugin + '.css');
     });
+
+    this.use(Prism, this);
   },
 
   methods: {
+    render: function render() {
+      this.codeText = this.code || this.$refs.pre.innerText;
+      this.$refs.pre.firstChild.innerHTML = this.codeText;
+      Prism.highlightElement(this.$refs.pre.firstChild);
+    },
     hasPlugin: function hasPlugin(plugin) {
       return this.plugins.indexOf(plugin) !== -1;
     }
   },
   mounted: function mounted() {
-    Prism.highlightElement(this.$refs.code);
+    this.render();
+  },
+  data: function data() {
+    return {
+      codeText: null
+    };
   }
 };
 

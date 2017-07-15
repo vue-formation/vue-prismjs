@@ -3,7 +3,12 @@
   "version": "0.1.0",
   "description": "Prism.js component for Vue.js",
   "author": "Branden Horiuchi <bhoriuchi@gmail.com>",
+  "license": "MIT",
   "main": "vue-prismjs.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vue-formation/vue-prismjs"
+  },
   "scripts": {
     "dev": "node build/dev-server.js",
     "start": "node build/dev-server.js",
