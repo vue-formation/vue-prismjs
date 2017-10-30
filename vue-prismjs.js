@@ -95,6 +95,12 @@ var Prism$2 = { render: function render() {
   mounted: function mounted() {
     this.render();
   },
+
+  watch: {
+    code: function code() {
+      this.render();
+    }
+  },
   data: function data() {
     return {
       codeText: null

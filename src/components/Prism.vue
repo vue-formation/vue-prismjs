@@ -97,6 +97,11 @@
     mounted () {
       this.render()
     },
+    watch: {
+      code () {
+        this.render()
+      }
+    },
     data () {
       return {
         codeText: null
