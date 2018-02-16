@@ -2,7 +2,6 @@
   pre(ref="pre", :class="preClass")
     code(ref="code", :class="codeClass")
       | {{code}}
-      slot(ref="codeslot", v-if="!code")
 </template>
 
 <script type="text/babel">
@@ -56,7 +55,8 @@
         }
       },
       code: {
-        type: String
+        type: String,
+        required: true
       }
     },
     computed: {
@@ -86,9 +86,10 @@
     },
     methods: {
       render () {
-        this.codeText = this.code || this.$refs.pre.innerText
-        this.$refs.pre.firstChild.innerHTML = this.codeText
-        Prism.highlightElement(this.$refs.pre.firstChild)
+        this.$nextTick(() => {
+          this.$refs.code.innerText = this.code
+          Prism.highlightElement(this.$refs.code)
+        })
       },
       hasPlugin (plugin) {
         return this.plugins.indexOf(plugin) !== -1
@@ -100,11 +101,12 @@
     watch: {
       code () {
         this.render()
-      }
-    },
-    data () {
-      return {
-        codeText: null
+      },
+      language () {
+        this.render()
+      },
+      plugins () {
+        this.render()
       }
     }
   }

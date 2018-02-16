@@ -10,9 +10,7 @@ in a webpack setting.
 ```js
 <template>
   <div>
-    <prism language="bash" :plugins="['command-line']">
-      npm install vue-prismjs --save
-    </prism>
+    <prism language="bash" :plugins="['command-line']", :code="code"></prism>
   </div>
 </template>
 
@@ -23,6 +21,9 @@ in a webpack setting.
   export default {
     components: {
       Prism
+    },
+    data () {
+      code: 'npm install vue-prismjs --save'
     }
   }
 </script>
@@ -32,5 +33,9 @@ in a webpack setting.
 
 * `language` {String} - language component to use. Defaults to `javascript`
 * `plugins` {Array} - array of plugin names. Optional
-* `code` {String} - code string. This is required if no code was provided as a child/slot. This should be used for reactive code display.
+* `code` {String} - code string. Required (previous version allowed slot, this has been deprecated).
 * `use` {Function} - a middleware function that allows you to interact with Prism and the vm before the code is rendered. The function has a signature of `function (Prism, vm) {}`. Optional
+
+### Notes
+
+* Usage of the code slot has been deprecated. You must now use the code property. This was due to issues with markup in slots having extra properties added by vue itself.

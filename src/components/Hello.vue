@@ -33,9 +33,9 @@
       return {
         pvm: null,
         prism: null,
-        code: 'npm install vue-prismjs',
-        language: 'bash',
-        plugins: ['command-line'],
+        code: '<h1>Test Markup</h1>',
+        language: 'markup',
+        plugins: [],
         languages: ['abap', 'actionscript', 'ada', 'apacheconf', 'apl', 'applescript', 'asciidoc', 'aspnet', 'autohotkey', 'autoit', 'bash', 'basic', 'batch', 'bison', 'brainfuck', 'bro', 'c', 'clike', 'coffeescript', 'core', 'cpp', 'crystal', 'csharp', 'css-extras', 'css', 'd', 'dart', 'diff', 'docker', 'eiffel', 'elixir', 'erlang', 'fortran', 'fsharp', 'gherkin', 'git', 'glsl', 'go', 'graphql', 'groovy', 'haml', 'handlebars', 'haskell', 'haxe', 'http', 'icon', 'inform7', 'ini', 'j', 'jade', 'java', 'javascript', 'jolie', 'json', 'jsx', 'julia', 'keyman', 'kotlin', 'latex', 'less', 'livescript', 'lolcode', 'lua', 'makefile', 'markdown', 'markup', 'matlab', 'mel', 'mizar', 'monkey', 'nasm', 'nginx', 'nim', 'nix', 'nsis', 'objectivec', 'ocaml', 'oz', 'parigp', 'parser', 'pascal', 'perl', 'php-extras', 'php', 'powershell', 'processing', 'prolog', 'properties', 'protobuf', 'puppet', 'pure', 'python', 'q', 'qore', 'r', 'reason', 'rest', 'rip', 'roboconf', 'ruby', 'rust', 'sas', 'sass', 'scala', 'scheme', 'scss', 'smalltalk', 'smarty', 'sql', 'stylus', 'swift', 'tcl', 'textile', 'twig', 'typescript', 'verilog', 'vhdl', 'vim', 'wiki', 'xojo', 'yaml'],
         pluginModules: [
           'autolinker',
@@ -65,17 +65,6 @@
           'unescaped-markup',
           'wpd'
         ]
-      }
-    },
-    watch: {
-      code () {
-        this.rerender()
-      },
-      language () {
-        this.rerender()
-      },
-      plugins () {
-        this.rerender()
       }
     }
   }

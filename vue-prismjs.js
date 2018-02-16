@@ -35,7 +35,7 @@ var plugins = {
 };
 
 var Prism$2 = { render: function render() {
-    var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('pre', { ref: "pre", class: _vm.preClass }, [_c('code', { ref: "code", class: _vm.codeClass }, [_vm._v(_vm._s(_vm.code)), !_vm.code ? _vm._t("default") : _vm._e()], 2)]);
+    var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('pre', { ref: "pre", class: _vm.preClass }, [_c('code', { ref: "code", class: _vm.codeClass }, [_vm._v(_vm._s(_vm.code))])]);
   }, staticRenderFns: [],
   props: {
     language: {
@@ -55,7 +55,8 @@ var Prism$2 = { render: function render() {
       }
     },
     code: {
-      type: String
+      type: String,
+      required: true
     }
   },
   computed: {
@@ -84,9 +85,12 @@ var Prism$2 = { render: function render() {
 
   methods: {
     render: function render() {
-      this.codeText = this.code || this.$refs.pre.innerText;
-      this.$refs.pre.firstChild.innerHTML = this.codeText;
-      Prism.highlightElement(this.$refs.pre.firstChild);
+      var _this = this;
+
+      this.$nextTick(function () {
+        _this.$refs.code.innerText = _this.code;
+        Prism.highlightElement(_this.$refs.code);
+      });
     },
     hasPlugin: function hasPlugin(plugin) {
       return this.plugins.indexOf(plugin) !== -1;
@@ -99,12 +103,13 @@ var Prism$2 = { render: function render() {
   watch: {
     code: function code() {
       this.render();
+    },
+    language: function language() {
+      this.render();
+    },
+    plugins: function plugins() {
+      this.render();
     }
-  },
-  data: function data() {
-    return {
-      codeText: null
-    };
   }
 };
 
