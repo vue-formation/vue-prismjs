@@ -1,7 +1,7 @@
 <template lang="pug">
   pre(ref="pre", :class="preClass")
     code(ref="code", :class="codeClass")
-      | {{code}}
+      slot
 </template>
 
 <script type="text/babel">
@@ -16,18 +16,19 @@
     'data-uri-highlight': {},
     'file-highlight': {},
     'highlight-keywords': {},
-    'ie8': { css: true },
+    'ie8': { css: true, deprecated: true },
     'jsonp-highlight': {},
     'keep-markup': {},
     'line-highlight': { css: true },
     'line-numbers': { css: true },
     'normalize-whitespace': {},
-    'previewer-angle': { css: true },
-    'previewer-base': { css: true },
-    'previewer-color': { css: true },
-    'previewer-easing': { css: true },
-    'previewer-gradient': { css: true },
-    'previewer-time': { css: true },
+    'previewers': { css: true },
+    'previewer-angle': { css: true, deprecated: true },
+    'previewer-base': { css: true, deprecated: true },
+    'previewer-color': { css: true, deprecated: true },
+    'previewer-easing': { css: true, deprecated: true },
+    'previewer-gradient': { css: true, deprecated: true },
+    'previewer-time': { css: true, deprecated: true },
     'remove-initial-line-feed': {},
     'show-invisibles': { css: true },
     'show-language': {},
@@ -56,7 +57,13 @@
       },
       code: {
         type: String,
-        required: true
+        default: ''
+      },
+      preRender: {
+        type: Function,
+        default (code) {
+          return code.replace(/\s+data-v-\S+="[^"]*"/g, '')
+        }
       }
     },
     computed: {
@@ -71,23 +78,37 @@
         }
       }
     },
-    created () {
-      if (!Prism.languages[this.language]) {
-        require(`prismjs/components/prism-${this.language}`)
-      }
-
-      this.plugins.forEach(plugin => {
-        let p = plugins[plugin] || {}
-        if (p) require(`prismjs/plugins/${plugin}/prism-${plugin}`)
-        if (p.css) require(`prismjs/plugins/${plugin}/prism-${plugin}.css`)
-      })
-
-      this.use(Prism, this)
-    },
     methods: {
       render () {
+        if (!Prism.languages[this.language]) {
+          require(`prismjs/components/prism-${this.language}`)
+        }
+
+        let pluginCount = 0
+        this.plugins.forEach(plugin => {
+          if (this._loadedPlugins[plugin]) {
+            return true
+          }
+          let p = plugins[plugin]
+          if (p) {
+            this._loadedPlugins[plugin] = true
+            pluginCount++
+            require(`prismjs/plugins/${plugin}/prism-${plugin}`)
+            if (p.css) {
+              require(`prismjs/plugins/${plugin}/prism-${plugin}.css`)
+            }
+          }
+        })
+        if (pluginCount) {
+          this.use(Prism, this)
+        }
+
+        // always update codetext to the code value
+        // otherwise see if the text has already been obtained
+        // otherwise obtain it from innerHTML
+        this.codeText = this.code || this.codeText || this.$refs.code.innerHTML
         this.$nextTick(() => {
-          this.$refs.code.innerText = this.code
+          this.$refs.code.textContent = this.preRender(this.codeText, this)
           Prism.highlightElement(this.$refs.code)
         })
       },
@@ -107,6 +128,12 @@
       },
       plugins () {
         this.render()
+      }
+    },
+    data () {
+      return {
+        codeText: '',
+        _loadedPlugins: {}
       }
     }
   }

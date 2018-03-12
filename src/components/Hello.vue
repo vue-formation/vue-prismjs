@@ -9,6 +9,9 @@
       .row
         .col-sm-12
           textarea.form-control(v-model="code")
+    prism(ref="jsonstr", language="json", :code="jsonstr")
+    prism(language="markup")
+      p Dog
 </template>
 
 <script type="text/babel">
@@ -34,6 +37,10 @@
         pvm: null,
         prism: null,
         code: '<h1>Test Markup</h1>',
+        jsonstr: JSON.stringify({
+          foo: 'bar',
+          baz: 'qux'
+        }, null, 2),
         language: 'markup',
         plugins: [],
         languages: ['abap', 'actionscript', 'ada', 'apacheconf', 'apl', 'applescript', 'asciidoc', 'aspnet', 'autohotkey', 'autoit', 'bash', 'basic', 'batch', 'bison', 'brainfuck', 'bro', 'c', 'clike', 'coffeescript', 'core', 'cpp', 'crystal', 'csharp', 'css-extras', 'css', 'd', 'dart', 'diff', 'docker', 'eiffel', 'elixir', 'erlang', 'fortran', 'fsharp', 'gherkin', 'git', 'glsl', 'go', 'graphql', 'groovy', 'haml', 'handlebars', 'haskell', 'haxe', 'http', 'icon', 'inform7', 'ini', 'j', 'jade', 'java', 'javascript', 'jolie', 'json', 'jsx', 'julia', 'keyman', 'kotlin', 'latex', 'less', 'livescript', 'lolcode', 'lua', 'makefile', 'markdown', 'markup', 'matlab', 'mel', 'mizar', 'monkey', 'nasm', 'nginx', 'nim', 'nix', 'nsis', 'objectivec', 'ocaml', 'oz', 'parigp', 'parser', 'pascal', 'perl', 'php-extras', 'php', 'powershell', 'processing', 'prolog', 'properties', 'protobuf', 'puppet', 'pure', 'python', 'q', 'qore', 'r', 'reason', 'rest', 'rip', 'roboconf', 'ruby', 'rust', 'sas', 'sass', 'scala', 'scheme', 'scss', 'smalltalk', 'smarty', 'sql', 'stylus', 'swift', 'tcl', 'textile', 'twig', 'typescript', 'verilog', 'vhdl', 'vim', 'wiki', 'xojo', 'yaml'],

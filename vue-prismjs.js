@@ -14,18 +14,19 @@ var plugins = {
   'data-uri-highlight': {},
   'file-highlight': {},
   'highlight-keywords': {},
-  'ie8': { css: true },
+  'ie8': { css: true, deprecated: true },
   'jsonp-highlight': {},
   'keep-markup': {},
   'line-highlight': { css: true },
   'line-numbers': { css: true },
   'normalize-whitespace': {},
-  'previewer-angle': { css: true },
-  'previewer-base': { css: true },
-  'previewer-color': { css: true },
-  'previewer-easing': { css: true },
-  'previewer-gradient': { css: true },
-  'previewer-time': { css: true },
+  'previewers': { css: true },
+  'previewer-angle': { css: true, deprecated: true },
+  'previewer-base': { css: true, deprecated: true },
+  'previewer-color': { css: true, deprecated: true },
+  'previewer-easing': { css: true, deprecated: true },
+  'previewer-gradient': { css: true, deprecated: true },
+  'previewer-time': { css: true, deprecated: true },
   'remove-initial-line-feed': {},
   'show-invisibles': { css: true },
   'show-language': {},
@@ -35,7 +36,7 @@ var plugins = {
 };
 
 var Prism$2 = { render: function render() {
-    var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('pre', { ref: "pre", class: _vm.preClass }, [_c('code', { ref: "code", class: _vm.codeClass }, [_vm._v(_vm._s(_vm.code))])]);
+    var _vm = this;var _h = _vm.$createElement;var _c = _vm._self._c || _h;return _c('pre', { ref: "pre", class: _vm.preClass }, [_c('code', { ref: "code", class: _vm.codeClass }, [_vm._t("default")], 2)]);
   }, staticRenderFns: [],
   props: {
     language: {
@@ -56,7 +57,13 @@ var Prism$2 = { render: function render() {
     },
     code: {
       type: String,
-      required: true
+      default: ''
+    },
+    preRender: {
+      type: Function,
+      default: function _default(code) {
+        return code.replace(/\s+data-v-\S+="[^"]*"/g, '');
+      }
     }
   },
   computed: {
@@ -69,26 +76,39 @@ var Prism$2 = { render: function render() {
       return _defineProperty({}, 'language-' + this.language, true);
     }
   },
-  created: function created() {
-    if (!Prism.languages[this.language]) {
-      require('prismjs/components/prism-' + this.language);
-    }
-
-    this.plugins.forEach(function (plugin) {
-      var p = plugins[plugin] || {};
-      if (p) require('prismjs/plugins/' + plugin + '/prism-' + plugin);
-      if (p.css) require('prismjs/plugins/' + plugin + '/prism-' + plugin + '.css');
-    });
-
-    this.use(Prism, this);
-  },
-
   methods: {
     render: function render() {
       var _this = this;
 
+      if (!Prism.languages[this.language]) {
+        require('prismjs/components/prism-' + this.language);
+      }
+
+      var pluginCount = 0;
+      this.plugins.forEach(function (plugin) {
+        if (_this._loadedPlugins[plugin]) {
+          return true;
+        }
+        var p = plugins[plugin];
+        if (p) {
+          _this._loadedPlugins[plugin] = true;
+          pluginCount++;
+          require('prismjs/plugins/' + plugin + '/prism-' + plugin);
+          if (p.css) {
+            require('prismjs/plugins/' + plugin + '/prism-' + plugin + '.css');
+          }
+        }
+      });
+      if (pluginCount) {
+        this.use(Prism, this);
+      }
+
+      // always update codetext to the code value
+      // otherwise see if the text has already been obtained
+      // otherwise obtain it from innerHTML
+      this.codeText = this.code || this.codeText || this.$refs.code.innerHTML;
       this.$nextTick(function () {
-        _this.$refs.code.innerText = _this.code;
+        _this.$refs.code.textContent = _this.preRender(_this.codeText, _this);
         Prism.highlightElement(_this.$refs.code);
       });
     },
@@ -110,6 +130,12 @@ var Prism$2 = { render: function render() {
     plugins: function plugins() {
       this.render();
     }
+  },
+  data: function data() {
+    return {
+      codeText: '',
+      _loadedPlugins: {}
+    };
   }
 };
 
