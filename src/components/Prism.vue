@@ -7,34 +7,23 @@
 <script type="text/babel">
   import Prism from 'prismjs'
 
-  const plugins = {
-    'autolinker': { css: true },
-    'autoloader': {},
-    'command-line': { css: true },
-    'copy-to-clipboard': {},
-    'custom-class': {},
-    'data-uri-highlight': {},
-    'file-highlight': {},
-    'highlight-keywords': {},
-    'ie8': { css: true, deprecated: true },
-    'jsonp-highlight': {},
-    'keep-markup': {},
-    'line-highlight': { css: true },
-    'line-numbers': { css: true },
-    'normalize-whitespace': {},
-    'previewers': { css: true },
-    'previewer-angle': { css: true, deprecated: true },
-    'previewer-base': { css: true, deprecated: true },
-    'previewer-color': { css: true, deprecated: true },
-    'previewer-easing': { css: true, deprecated: true },
-    'previewer-gradient': { css: true, deprecated: true },
-    'previewer-time': { css: true, deprecated: true },
-    'remove-initial-line-feed': {},
-    'show-invisibles': { css: true },
-    'show-language': {},
-    'toolbar': { css: true },
-    'unescaped-markup': { css: true },
-    'wpd': { css: true }
+  function noop () {}
+
+  function tryRequirePlugin (plugin, warnings) {
+    try {
+      require(`prismjs/plugins/${plugin}/prism-${plugin}`)
+      try {
+        require(`prismjs/plugins/${plugin}/prism-${plugin}.css`)
+      } catch (err) {
+        noop(err)
+      }
+      return true
+    } catch (err) {
+      if (warnings) {
+        console.warn(err)
+      }
+    }
+    return false
   }
 
   export default {
@@ -64,6 +53,10 @@
         default (code) {
           return code.replace(/\s+data-v-\S+="[^"]*"/g, '')
         }
+      },
+      warn: {
+        type: Boolean,
+        default: false
       }
     },
     computed: {
@@ -86,17 +79,12 @@
 
         let pluginCount = 0
         this.plugins.forEach(plugin => {
-          if (this._loadedPlugins[plugin]) {
+          if (Prism.plugins && Prism.plugins[plugin]) {
             return true
           }
-          let p = plugins[plugin]
-          if (p) {
-            this._loadedPlugins[plugin] = true
+
+          if (tryRequirePlugin(plugin, this.warn)) {
             pluginCount++
-            require(`prismjs/plugins/${plugin}/prism-${plugin}`)
-            if (p.css) {
-              require(`prismjs/plugins/${plugin}/prism-${plugin}.css`)
-            }
           }
         })
         if (pluginCount) {
@@ -132,8 +120,7 @@
     },
     data () {
       return {
-        codeText: '',
-        _loadedPlugins: {}
+        codeText: ''
       }
     }
   }

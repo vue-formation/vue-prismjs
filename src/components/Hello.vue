@@ -10,7 +10,7 @@
         .col-sm-12
           textarea.form-control(v-model="code")
     prism(ref="jsonstr", language="json", :code="jsonstr")
-    prism(language="markup")
+    prism(language="markup", :plugins="['toolbar1']", :use="middleware", :warn="true")
       p Dog
 </template>
 
@@ -25,6 +25,12 @@
       middleware (Prism, vm) {
         this.prism = Prism
         this.pvm = vm
+        Prism.plugins.toolbar.registerButton('hello-world', {
+          text: 'Hello World!',
+          onClick (env) {
+            console.log(env.language)
+          }
+        })
       },
       rerender () {
         setTimeout(() => {

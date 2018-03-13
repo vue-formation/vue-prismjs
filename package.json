@@ -1,6 +1,6 @@
 {
   "name": "vue-prismjs",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Prism.js component for Vue.js",
   "author": "Branden Horiuchi <bhoriuchi@gmail.com>",
   "license": "MIT",
