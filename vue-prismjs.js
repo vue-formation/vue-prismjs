@@ -62,7 +62,8 @@ var Prism$2 = { render: function render() {
   computed: {
     preClass: function preClass() {
       return {
-        'command-line': this.hasPlugin('command-line')
+        'command-line': this.hasPlugin('command-line'),
+        'line-numbers': this.hasPlugin('line-numbers')
       };
     },
     codeClass: function codeClass() {
