@@ -62,7 +62,8 @@
     computed: {
       preClass () {
         return {
-          'command-line': this.hasPlugin('command-line')
+          'command-line': this.hasPlugin('command-line'),
+          'line-numbers': this.hasPlugin('line-numbers')
         }
       },
       codeClass () {
